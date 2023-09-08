@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <!--Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet"  th:href="@{/bootstrap.min.css}">
+    <!--sbb CSS-->
+    <link rel="stylesheet" href="style.css">
+    <title>Title</title>
+</head>
+
+<body>
+<!--기본 템플릿 안에 삽입될 내용 start-->
+<th:block layout:fragment="content"></th:block>
+
+<script th:src="@{/bootstrap.min.js}"></script>
+<!--기본 템플릿 안에 삽입될 내용 end-->
+</body>
+</html>

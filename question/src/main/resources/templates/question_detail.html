@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>질문 상세</title>
+</head>
+
+
+<body>
+	<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+	<!--부트스트랩 링크추가-->
+
+	<nav th:fragment="navbarFragment"
+		class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">SBB</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/user/login}">로그인</a></li>
+					<!--회원가입화면으로 이동할수있는 링크-->
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/user/signup}">회원가입</a></li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="container my-3">
+		<!--질문-->
+		<h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
+		<div class="card my-3">
+			<div class="card-body">
+				<div class="card-text" style="white-space: pre-line;"
+					th:text="${question.content}"></div>
+				<div class="d-flex justify-content-end">
+					<div class="badge bg-light text-dark p-2 text-start">
+						<div
+							th:text="${#dates.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--답변의 갯수표시-->
+		<h5 class="border-bottom my-3 py-2"
+			th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+		<!--#list.size(이터러블객체)-타임리프가 제공하는 유틸리티로 객체의 길이를 반환-->
+		<!--답변 반복 시작-->
+		<div class="card my-3" th:each="answer : ${question.answerList}">
+			<div class="card-body">
+				<div class="card-text" style="white-space: pre-line;"
+					th:text="${answer.content}"></div>
+				<div class="d-flex justify-content-end">
+					<div class="badge bg-light text-dark p-2 text-start">
+						<div
+							th:text="${#dates.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--답변 반복 끝-->
+		<!--답변 작성-->
+		<form th:action="@{|/answer/create/${question.id}|}"
+			th:object="${answerForm}" method="post" class="my-3">
+			<div class="alert alert-danger" role="alert"
+				th:if="${#fields.hasAnyErrors()}">
+				<div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+			</div>
+			<textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" rows="10" class="form-control"></textarea>
+			<textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+			<input type="submit" value="답변등록" class="btn btn-primary my-2">
+		</form>
+	</div>
+	<script th:src="@{/bootstrap.min.js}"></script>
+</body>
+</html>
